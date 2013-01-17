@@ -56,23 +56,16 @@ public class PlagiarismChecker {
     }
     public static void main(String[] args) throws Exception {
         String google = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=";
-        String search = "This is really the sentence that I written on my own in lab. I claim this one is also mine but the next is stolen. " +
-        		"Once upon a time in a land far far away called Britain a young and beautiful lady was doing her washing." +
-                "And this should appear also mine not plagiased.";
+        String search = "This is really sentence I wrote myself. " +
+        		"bulky brother is watching you.";
         String charset = "UTF-8";
         
         
         List<String> sentences = splitToSentences(search);
-        for (String sentence : sentences) {            
+        for (String sentence : sentences) {   
+            System.out.println("Checking sentence: " + sentence);
             URL url = new URL(google + URLEncoder.encode("\"" + sentence + "\"", charset));
             Reader reader = new InputStreamReader(url.openStream(), charset);
-            
-            BufferedReader bufferedReader = new BufferedReader(reader);
-            
-            String s;
-            while ((s = bufferedReader.readLine())!=null)
-                System.out.println(s);
-            bufferedReader.close();
             SearchResult results = new Gson().fromJson(reader, SearchResult.class);
             
             if (!results.getResponseData().getResults().isEmpty()) {
@@ -80,6 +73,7 @@ public class PlagiarismChecker {
                 System.out.println(sentence);
                 System.out.println(results.getResponseData().getResults().get(0).getTitle());
                 System.out.println(results.getResponseData().getResults().get(0).getUrl());
+                System.out.println();
             }
         }
     }    
